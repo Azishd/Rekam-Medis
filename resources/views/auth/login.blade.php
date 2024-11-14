@@ -11,7 +11,7 @@
         <div class="flex min-h-full flex-col justify-center px-6 lg:px-8">
             <div class="sm:mx-auto sm:w-full">
                 <h2 class="mt-10 text-center text-5xl leading-9 tracking-tight text-black">Welcome to
-                    <span class="text-600 font-bold " style="color:#32F1A1">Health Connect</span>
+                    <span class="text-600 font-bold " style="color:#3928a7">Health Connect</span>
                 </h2>
                 <h2 class="mt-2 text-md max-md:text-center leading-9 tracking-tight text-gray-500">Please login to your account
                 </h2>
@@ -43,14 +43,14 @@
                         <div class="flex items-end mt-2">
                             <div class="text-sm ml-auto">
                                 Don't have an account ?
-                                <a href="/register" class="font-semibold text-green-800 hover:text-green-600">register
+                                <a href="/register" class="font-semibold text-blue-800 hover:text-blue-600">register
                                     here</a>
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <button type="submit" class="flex w-full justify-center rounded-md bg-green-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">Sign
+                        <button type="submit" class="flex w-full justify-center rounded-md bg-blue-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">Sign
                             in</button>
                     </div>
                 </form>
