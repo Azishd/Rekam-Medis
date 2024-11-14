@@ -122,10 +122,10 @@
                         <div class="flex items-start mb-2">
                             <div class="text-sm">
                                 Already have an account ?
-                                <a href="/login" class="font-semibold text-green-800 hover:text-green-600">Login</a>
+                                <a href="/login" class="font-semibold text-blue-800 hover:text-blue-600">Login</a>
                             </div>
                         </div>
-                        <button type="submit" class="flex w-full justify-center rounded-md bg-green-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">Sign Up</button>
+                        <button type="submit" class="flex w-full justify-center rounded-md bg-blue-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">Sign Up</button>
                     </div>
                 </form>
             </div>
