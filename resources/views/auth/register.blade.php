@@ -3,7 +3,7 @@
 <div class="grid grid-cols-2 max-md:grid-cols-1 h-screen bg-white" style="background-color:  #303030;">
     <!-- Left Column -->
     <div class="max-md:hidden flex items-center justify-center bg-transparent">
-        <img src="https://img.freepik.com/free-psd/entrance-emergency-room-hospital-generative-ai_587448-2182.jpg" alt="" class="object-cover h-full w-full opacity-50">
+        <img src="https://media.cgtrader.com/variants/gKbuhhxWNeYeGNPsMzBXcwnP/64d1262c1acde2eb3beef249c4695a8ad88c958dd79db36f763bf631017addd0/1.jpg" alt="" class="object-cover h-full w-full opacity-50">
     </div>
 
     <!-- Right Column -->
@@ -130,7 +130,7 @@
                 </form>
             </div>
             <a href="{{ route('landing') }}">
-                <img class="mx-auto mt-10 lg:h-24 w-auto" src="{{ asset('img/healthconnect_logo.png') }}" alt="Your Company">
+                <img class="mx-auto mt-10 lg:h-24 w-auto" src="{{ asset('img/Marc_logo.png') }}" alt="Your Company">
             </a>
         </div>
     </div>

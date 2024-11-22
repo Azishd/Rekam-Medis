@@ -16,7 +16,7 @@
         </button>
 
         <a href="/dashboard" class="flex justify-center align-center mb-5">
-            <img src="{{ asset('img/healthconnect_logo.png') }}" class="h-6 sm:h-7" alt="Health Connect" />
+            <img src="{{ asset('img/Marc_logo.png') }}" class="h-6 sm:h-7" alt="Health Connect" />
         </a>
 
         <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="bg-transparent rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex justify-center hover:bg-blue-600 group sm:hidden" id="closeSidebarBtn">
