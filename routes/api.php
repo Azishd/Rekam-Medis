@@ -15,18 +15,28 @@ use Illuminate\Support\Facades\Http;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::prefix('satu-sehat')->group(function () {
+    Route::get('/data', function () {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('API_CLIENT_ID'),
+        ])->get(env('API_BASE_URL') . '/fhir-r4/v1'); // Replace '/data-endpoint' with the actual API endpoint
 
-Route::get('/test-api-connection', function () {
-    $response = Http::withHeaders([
-        'Authorization' => 'Bearer ' . env('API_CLIENT_ID'),
-    ])->get(env('API_BASE_URL') . '/status'); // Replace '/status' with the actual test endpoint
+        if ($response->successful()) {
+            return response()->json($response->json());
+        }
 
-    if ($response->successful()) {
-        return response()->json(['message' => 'Connection successful', 'data' => $response->json()]);
-    } else {
-        return response()->json(['message' => 'Connection failed', 'status' => $response->status()], $response->status());
-    }
+        return response()->json(['error' => 'Unable to fetch data'], $response->status());
+    });
+
+    Route::post('/data', function (Request $request) {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('API_CLIENT_ID'),
+        ])->post(env('API_BASE_URL') . '/fhir-r4/v1', $request->all()); // Replace '/data-endpoint' with the correct endpoint
+
+        if ($response->successful()) {
+            return response()->json(['message' => 'Data sent successfully', 'data' => $response->json()]);
+        }
+
+        return response()->json(['error' => 'Unable to send data'], $response->status());
+    });
 });
