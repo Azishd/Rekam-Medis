@@ -304,7 +304,7 @@
                         <div class="py-2">
                             <h1 class="text-2xl font-bold mb-5" style="color: #151D48;">Hello Patient,
                                 How are you feeling today?</h1>
-                            <form action="{{ route('assessment.start') }}" method="POST">
+                            {{--" method="POST">
                                 @csrf
                                 <button type="submit" class="rounded-md bg-blue-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">
                                     @php
@@ -316,7 +316,7 @@
                                     }
                                     @endphp
                                 </button>
-                            </form>
+                            </form> Disable for now--}}
                         </div>
                     </div>
                 </div>

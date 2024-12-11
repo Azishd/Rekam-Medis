@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
-use App\Http\Controllers\AssessmentController;
+// use App\Http\Controllers\AssessmentController; Disable for now
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ProfileController;
@@ -40,7 +40,7 @@ Route::get('/patient', [PatientController::class, 'index'])->name('patient')->mi
 Route::get('/patient/{id}', [PatientController::class, 'show'])->name('patient.show')->middleware(['auth', 'adminOrDoctor']);
 Route::put('/patient/{id}', [PatientController::class, 'update'])->name('patient.update')->middleware(['auth', 'adminOnly']);
 
-Route::get('/assessment', [AssessmentController::class, 'index'])->name('assessment')->middleware('auth');
+/*Route::get('/assessment', [AssessmentController::class, 'index'])->name('assessment')->middleware('auth');
 Route::post('/assessment', [AssessmentController::class, 'start'])->name('assessment.start')->middleware('auth');
 Route::get('/assessment/question/{id}', [AssessmentController::class, 'question'])->name('assessment.question')->middleware(['auth', 'patientOnly']);
 Route::post('/assessment/question/{id}', [AssessmentController::class, 'answer'])->name('assessment.answer')->middleware(['auth', 'patientOnly']);
@@ -50,7 +50,7 @@ Route::delete('/assessment', [AssessmentController::class, 'destroy'])->name('as
 Route::get('/assessment-answer', [AssessmentController::class, 'getAnswer'])->middleware('auth');
 Route::get('/assessment-notes', [AssessmentController::class, 'getNotes'])->middleware('auth');
 Route::post('/assessment-answer', [AssessmentController::class, 'verify'])->name('assessment.verify')->middleware(['auth', 'adminOrDoctor']);
-
+*/
 Route::get('/question', [QuestionController::class, 'index'])->name('question')->middleware(['auth', 'adminOrDoctor']);
 Route::get('/question/create', [QuestionController::class, 'create'])->name('question.create')->middleware(['auth', 'adminOnly']);
 Route::post('/question', [QuestionController::class, 'store'])->name('question.store')->middleware(['auth', 'adminOnly']);
@@ -62,3 +62,4 @@ Route::put('/appointment', [AppointmentController::class, 'verify'])->name('appo
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->middleware('auth');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
 Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
+

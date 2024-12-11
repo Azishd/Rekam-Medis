@@ -3,7 +3,7 @@
 <div class="grid lg:grid-cols-2 md:grid-cols-1 h-screen bg-white" style="background-color: #303030;">
     <!-- Left Column -->
     <div class="max-md:hidden flex items-center justify-center bg-transparent">
-        <img src="https://img.freepik.com/free-psd/abstract-blur-luxury-hospital-corridor-generative-ai_587448-2121.jpg" class="object-cover h-full w-full opacity-50" alt="">
+        <img src="https://img.freepik.com/premium-photo/long-hospital-corridor_117023-1761.jpg" class="object-cover h-full w-full opacity-50" alt="">
     </div>
 
     <!-- Right Column -->
@@ -55,7 +55,7 @@
                     </div>
                 </form>
                 <a href="{{ route('landing') }}">
-                    <img class="mx-auto mt-10 lg:h-24 w-auto" src="{{ asset('img/healthconnect_logo.png') }}" alt="Your Company">
+                    <img class="mx-auto mt-10 lg:h-24 w-auto" src="{{ asset('img/Marc_logo.png') }}" alt="Your Company">
                 </a>
             </div>
         </div>
