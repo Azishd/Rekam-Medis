@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,27 +17,62 @@ use Illuminate\Support\Facades\Http;
 */
 
 Route::prefix('satu-sehat')->group(function () {
-    Route::get('/data', function () {
+    Route::get('/patient/{identifier}', function ($identifier) {
+        $url = env('API_BASE_URL') . "/Patient?identifier=" . $identifier;
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . env('API_CLIENT_ID'),
-        ])->get(env('API_BASE_URL') . '/fhir-r4/v1'); // Replace '/data-endpoint' with the actual API endpoint
+            'Content-Type' => 'application/json',
+        ])->get($url);
 
         if ($response->successful()) {
             return response()->json($response->json());
         }
 
-        return response()->json(['error' => 'Unable to fetch data'], $response->status());
+        return response()->json([
+            'error' => 'Unable to fetch data',
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ], $response->status());
     });
 
-    Route::post('/data', function (Request $request) {
+    Route::post('/patient', function (Request $request) {
+        $url = env('API_BASE_URL') . "/Patient";
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . env('API_CLIENT_ID'),
-        ])->post(env('API_BASE_URL') . '/fhir-r4/v1', $request->all()); // Replace '/data-endpoint' with the correct endpoint
+            'Content-Type' => 'application/json',
+        ])->post($url, [
+            "resourceType" => "Patient",
+            "identifier" => [
+                [
+                    "use" => "usual",
+                    "value" => $request->identifier_value,
+                ],
+            ],
+            "name" => [
+                [
+                    "use" => "official",
+                    "family" => $request->family_name,
+                    "given" => [$request->given_name],
+                ],
+            ],
+            "gender" => $request->gender,
+            "birthDate" => $request->birth_date,
+        ]);
 
         if ($response->successful()) {
-            return response()->json(['message' => 'Data sent successfully', 'data' => $response->json()]);
+            return response()->json(['message' => 'Patient created successfully', 'data' => $response->json()]);
         }
 
-        return response()->json(['error' => 'Unable to send data'], $response->status());
+        return response()->json([
+            'error' => 'Unable to create patient',
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ], $response->status());
+    });
+
+    Route::get('/patient', function () {
+        return response()->json(['message' => 'Please specify a patient identifier or use POST for creating a patient.']);
     });
 });
