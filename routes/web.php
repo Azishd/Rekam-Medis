@@ -9,6 +9,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SatusehatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,3 +64,5 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->mi
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
 Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
 
+Route::get('/satusehat/patients', [SatusehatController::class, 'getPatients']);
+Route::get('/patients/{nik}', [SatusehatController::class, 'getPatientByNIK']);
