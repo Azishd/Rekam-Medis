@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\Log;
 
 Route::prefix('satu-sehat')->group(function () {
     Route::get('/patient/{identifier}', function ($identifier) {
+        $accessToken = 'L7ljwlg5N3I4PDFcVU9QFAVn7g5Z';
+        
         $url = env('API_BASE_URL') . "/Patient?identifier=" . $identifier;
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . env('API_CLIENT_ID'),
+            'Authorization' => 'Bearer ' . env('API_ACCESS_TOKEN'),
             'Content-Type' => 'application/json',
         ])->get($url);
 
@@ -37,10 +39,12 @@ Route::prefix('satu-sehat')->group(function () {
     });
 
     Route::post('/patient', function (Request $request) {
+        $accessToken = 'L7ljwlg5N3I4PDFcVU9QFAVn7g5Z';
+        
         $url = env('API_BASE_URL') . "/Patient";
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . env('API_CLIENT_ID'),
+            'Authorization' => 'Bearer ' . env('API_ACCESS_TOKEN'),
             'Content-Type' => 'application/json',
         ])->post($url, [
             "resourceType" => "Patient",
