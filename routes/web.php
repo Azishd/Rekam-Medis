@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SatusehatController;
+use App\Http\Controllers\MedicalRecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,3 +67,5 @@ Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile
 
 Route::get('/satusehat/patients', [SatusehatController::class, 'getPatients']);
 Route::get('/patients/{nik}', [SatusehatController::class, 'getPatientByNIK']);
+
+Route::resource('medical-records', MedicalRecordController::class);
