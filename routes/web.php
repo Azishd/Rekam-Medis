@@ -68,4 +68,4 @@ Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile
 Route::get('/satusehat/patients', [SatusehatController::class, 'getPatients']);
 Route::get('/patients/{nik}', [SatusehatController::class, 'getPatientByNIK']);
 
-Route::resource('medical-records', MedicalRecordController::class);
+Route::resource('medical-records', MedicalRecordController::class)->middleware('auth');
