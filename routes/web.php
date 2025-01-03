@@ -60,6 +60,10 @@ Route::delete('/question', [QuestionController::class, 'destroy'])->name('questi
 
 Route::get('/appointment', [AppointmentController::class, 'index'])->name('appointment')->middleware('auth');
 Route::put('/appointment', [AppointmentController::class, 'verify'])->name('appointment.verify')->middleware(['auth', 'adminOrDoctor']);
+Route::get('/appointments/{id}', [AppointmentController::class, 'show'])->name('appointments.show'); // View appointment details (GET)
+Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit'); // Edit appointment (GET)
+Route::put('/appointments/{id}', [AppointmentController::class, 'update'])->name('appointments.update'); // Update appointment (PUT)
+Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store'); // Create appointment (POST)
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->middleware('auth');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
