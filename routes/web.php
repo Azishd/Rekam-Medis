@@ -60,12 +60,15 @@ Route::delete('/question', [QuestionController::class, 'destroy'])->name('questi
 
 Route::get('/appointment', [AppointmentController::class, 'index'])->name('appointment')->middleware('auth');
 Route::put('/appointment', [AppointmentController::class, 'verify'])->name('appointment.verify')->middleware(['auth', 'adminOrDoctor']);
+Route::get('/appointment/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('auth');  // Create appointment form (GET)
+Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('auth');  // Store appointment (POST)
+
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->middleware('auth');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
 Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
 
 Route::get('/satusehat/patients', [SatusehatController::class, 'getPatients']);
-Route::get('/patients/{nik}', [SatusehatController::class, 'getPatientByNIK']);
+Route::get('/patients/by-nik', [SatusehatController::class, 'getPatientByNIK']);
 
-Route::resource('medical-records', MedicalRecordController::class);
+Route::resource('medical-records', MedicalRecordController::class)->middleware('auth');
