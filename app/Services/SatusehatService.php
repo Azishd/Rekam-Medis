@@ -28,6 +28,7 @@ class SatusehatService
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
         ])->post(env('API_BASE_URL') . '/Patient', [
+            'resourceType' => 'Patient',
             'identifier' => [
                 [
                     'system' => 'https://fhir.kemkes.go.id/id/nik',

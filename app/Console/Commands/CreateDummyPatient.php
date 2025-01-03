@@ -29,7 +29,7 @@ class CreateDummyPatient extends Command
 
         $patients = [
             [
-                'nik' => '9271060312005',
+                'nik' => '92710603120004',
                 'name' => ['family' => 'Ardianto', 'given' => ['Putra']],
                 'gender' => 'male',
                 'birthDate' => '1992-01-09',
