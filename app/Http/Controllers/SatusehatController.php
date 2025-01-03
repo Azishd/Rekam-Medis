@@ -5,49 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Cache;
 
 class SatusehatController extends Controller
 {
-    public function getPatients()
+    /**
+     * Get Access Token
+     */
+    private function getAccessToken()
     {
-        // Step 1: Get Access Token
-        $authResponse = Http::asForm()->post(env('AUTH_URL') . '/accesstoken?grant_type=client_credentials', [
-            'client_id' => env('API_CLIENT_ID'),
-            'client_secret' => env('API_SECRET'),
-            'scope' => 'patient/Patient.read',
-        ]);
-
-        if (!$authResponse->successful()) {
-            $this->error("Failed to fetch access token: " . $authResponse->body());
-            return;
+        if (Cache::has('satusehat_access_token')) {
+            return Cache::get('satusehat_access_token');
         }
 
-        $accessToken = $authResponse->json('access_token');
-        Log::info("Access token fetched successfully: " . $accessToken);
-
-        // Step 2: Get List of Patients
-        $url = env('API_BASE_URL') . '/Patient';
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $accessToken,
-        ])->get($url);
-
-        if ($response->successful()) {
-            return response()->json($response->json());
-        } else {
-            Log::info("Error Status: " . $response->status());  // Log the HTTP status code
-            Log::info("Response Body: " . $response->body());  // Log the full response body
-            return response()->json([
-                'error' => 'Failed to retrieve patient data',
-                'status' => $response->status(),
-                'message' => $response->body()
-            ], 400);
-        }
-    }
-
-    public function getPatientByNIK($nik)
-    {
-        // Step 1: Get Access Token
         $authResponse = Http::asForm()->post(env('AUTH_URL') . '/accesstoken?grant_type=client_credentials', [
             'client_id' => env('API_CLIENT_ID'),
             'client_secret' => env('API_SECRET'),
@@ -56,33 +26,151 @@ class SatusehatController extends Controller
 
         if (!$authResponse->successful()) {
             Log::error('Failed to fetch access token', ['response' => $authResponse->body()]);
-            return response()->json(['error' => 'Failed to fetch access token'], 400);
+            return null;
         }
 
         $accessToken = $authResponse->json('access_token');
-        Log::info('Access Token Retrieved', ['access_token' => $accessToken]);
+        Cache::put('satusehat_access_token', $accessToken, 3600);
 
-        // Step 2: Query Patient by NIK
+        return $accessToken;
+    }
+
+    /**
+     * Get Patient by NIK
+     */
+    public function getPatientByNIK($nik)
+    {
+        $accessToken = $this->getAccessToken();
+        if (!$accessToken) {
+            return response()->json(['error' => 'Unable to authenticate with SATUSEHAT API'], 500);
+        }
+
         $url = env('API_BASE_URL') . '/Patient';
+        $query = [
+            'identifier' => 'https://fhir.kemkes.go.id/id/nik|' . $nik,
+        ];
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
-        ])->get($url, [
-            'identifier' => 'https://fhir.kemkes.go.id/id/nik|' . $nik,
-        ]);
+        ])->get($url, $query);
 
         if ($response->successful()) {
             return response()->json($response->json());
         } else {
-            Log::error('Failed to retrieve patient data', [
+            Log::error('Failed to retrieve patient by NIK', [
+                'nik' => $nik,
                 'status' => $response->status(),
                 'response' => $response->body(),
             ]);
+
             return response()->json([
                 'error' => 'Failed to retrieve patient data',
                 'status' => $response->status(),
                 'message' => $response->body(),
-            ], 403);
+            ], $response->status());
         }
     }
-}
 
+    /**
+     * Get Patient by Name, Birthdate, and Gender
+     */
+    public function getPatientByDetails(Request $request)
+    {
+        $accessToken = $this->getAccessToken();
+        if (!$accessToken) {
+            return response()->json(['error' => 'Unable to authenticate with SATUSEHAT API'], 500);
+        }
+
+        $url = env('API_BASE_URL') . '/Patient';
+        $query = [
+            'name' => $request->input('name'),
+            'birthdate' => $request->input('birthdate'),
+            'gender' => $request->input('gender'),
+        ];
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get($url, $query);
+
+        if ($response->successful()) {
+            return response()->json($response->json());
+        } else {
+            Log::error('Failed to retrieve patient by details', [
+                'query' => $query,
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            return response()->json([
+                'error' => 'Failed to retrieve patient data',
+                'status' => $response->status(),
+                'message' => $response->body(),
+            ], $response->status());
+        }
+    }
+    
+    public function addPatient(Request $request)
+    {
+        // Step 1: Get Access Token
+        $accessToken = $this->getAccessToken();
+        if (!$accessToken) {
+            return response()->json(['error' => 'Unable to authenticate with SATUSEHAT API'], 500);
+        }
+
+        // Step 2: Define Endpoint and Headers
+        $url = env('API_BASE_URL') . '/Patient';
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+        ];
+
+        // Step 3: Create Payload
+        $payload = [
+            'resourceType' => 'Patient',
+            'identifier' => [
+                [
+                    'use' => 'official',
+                    'system' => 'https://fhir.kemkes.go.id/id/nik',
+                    'value' => $request->input('nik'),
+                ],
+                // Tambahkan data identifier lainnya jika diperlukan
+            ],
+            'name' => [
+                [
+                    'use' => 'official',
+                    'family' => $request->input('last_name'),
+                    'given' => [$request->input('first_name')],
+                ],
+            ],
+            'gender' => $request->input('gender'),
+            'birthDate' => $request->input('birthdate'),
+            // Tambahkan properti lain sesuai kebutuhan
+        ];
+
+        // Step 4: Send POST Request
+        $response = Http::withHeaders($headers)->post($url, $payload);
+
+        // Step 5: Handle Response
+        if ($response->successful()) {
+            $responseData = $response->json();
+            $patientId = $responseData['id'] ?? null;
+
+            return response()->json([
+                'message' => 'Patient data added successfully',
+                'patient_id' => $patientId,
+            ], 201);
+        } else {
+            Log::error('Failed to add patient', [
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            return response()->json([
+                'error' => 'Failed to add patient data',
+                'status' => $response->status(),
+                'message' => $response->body(),
+            ], $response->status());
+        }
+    }
+
+}

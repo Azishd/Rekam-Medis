@@ -50,6 +50,22 @@ class CreateDummyPatient extends Command
 
     private function createPatient($accessToken, $patient)
     {
+        $identifier = 'https://fhir.kemkes.go.id/id/nik|' . $patient['nik'];
+        $existingResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+        ])->get(env('API_BASE_URL') . '/Patient', [
+            'identifier' => $identifier,
+        ]);
+
+        // Check if the patient exists
+        $responseData = $existingResponse->json();
+        if ($existingResponse->successful() && isset($responseData['entry']) && count($responseData['entry']) > 0) {
+            $this->info('Patient already exists: ' . $patient['nik']);
+            return;
+        }
+
+        // Proceed with creating the patient if no duplicate is found
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
@@ -86,4 +102,5 @@ class CreateDummyPatient extends Command
             $this->line(json_encode($response->json(), JSON_PRETTY_PRINT));
         }
     }
+
 }
