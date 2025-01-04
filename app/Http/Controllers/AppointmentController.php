@@ -16,6 +16,41 @@ class AppointmentController extends Controller
         return view('appointment.index', compact('appointments'));
     }
 
+    public function show($id)
+    {
+        $accessToken = $this->getAccessToken();
+        if (!$accessToken) {
+            return response()->json(['error' => 'Failed to retrieve access token'], 401);
+        }
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+        ])->get("https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Appointment/{$id}");
+
+        // Check if the response was successful (HTTP 200)
+        if ($response->successful()) {
+            return response()->json([
+                'resourceType' => 'Appointment',
+                'id' => $response->json('id'),
+                'status' => $response->json('status'),
+                'appointmentType' => $response->json('appointmentType'),
+                'basedOn' => $response->json('basedOn'),
+                'slot' => $response->json('slot'),
+                'created' => $response->json('created'),
+                'participant' => $response->json('participant')
+            ]);
+        } else {
+            // Handle errors with specific message based on the response status
+            return response()->json([
+                'error' => 'Appointment not found',
+                'status' => $response->status(),
+                'message' => $response->body()
+            ], $response->status());
+        }
+    }
+
+
     // Show the form to create a new appointment (GET)
     public function create()
     {
@@ -104,6 +139,7 @@ class AppointmentController extends Controller
             return back()->withErrors(['msg' => 'Error: ' . $response->status()]);
         }
     }
+
 
     // Verify the appointment (PUT)
     public function verify(Request $request)

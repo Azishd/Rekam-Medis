@@ -60,8 +60,11 @@ Route::delete('/question', [QuestionController::class, 'destroy'])->name('questi
 
 Route::get('/appointment', [AppointmentController::class, 'index'])->name('appointment')->middleware('auth');
 Route::put('/appointment', [AppointmentController::class, 'verify'])->name('appointment.verify')->middleware(['auth', 'adminOrDoctor']);
-Route::get('/appointment/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('auth');  // Create appointment form (GET)
-Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('auth');  // Store appointment (POST)
+Route::get('/appointment/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('auth');
+Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('auth');
+Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointment.store');
+Route::get('/appointment/{id}', [AppointmentController::class, 'show'])->name('appointment.show')->middleware('auth');
+Route::get('/appointment/search', [AppointmentController::class, 'searchByActor'])->name('appointment.search')->middleware('auth');
 
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->middleware('auth');
