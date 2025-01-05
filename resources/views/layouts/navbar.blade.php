@@ -61,7 +61,7 @@
                 </a>
             </li>
             @endif
-            {{-- Disable for now
+
             <li>
                 <a href="{{ route('assessment') }}" class="flex justify-center p-2 text-black rounded-lg hover:bg-blue-600 group {{ Str::contains(Route::currentRouteName(), 'assessment') ? 'bg-blue-600' : '' }}" id="navLink">
                     <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 text-black transition duration-75 group-hover:text-white {{ Str::contains(Route::currentRouteName(), 'assessment') ? 'text-white' : '' }}" id="navIcon" viewBox="0 0 16 16">
@@ -70,7 +70,7 @@
                     <span class="flex-1 ms-3 whitespace-nowrap sm:hidden" id="textSidebarMini">Assessment History</span>
                 </a>
             </li>
-            --}}
+
             <li>
                 <a href="{{ route('appointment') }}" class="flex justify-center p-2 text-black rounded-lg hover:bg-blue-600 group {{ Str::contains(Route::currentRouteName(), 'appointment') ? 'bg-blue-600' : '' }}" id="navLink">
                     <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 text-black transition duration-75 group-hover:text-white {{ Str::contains(Route::currentRouteName(), 'appointment') ? 'text-white' : '' }}" viewBox="0 0 45 45">
@@ -84,7 +84,7 @@
                     <span class="flex-1 ms-3 whitespace-nowrap sm:hidden text-black" id="textSidebarMini">Your Appointments</span>
                 </a>
             </li>
-            {{--@if (Auth::guard('doctors')->check() || Auth::guard('admins')->check())
+            @if (Auth::guard('doctors')->check() || Auth::guard('admins')->check())
             <li>
                 <a href="{{ route('question') }}" class="flex justify-center p-2 text-black rounded-lg hover:bg-blue-600 group {{ Str::contains(Route::currentRouteName(), 'question') ? 'bg-blue-600' : '' }}" id="navLink">
                     <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 text-black transition duration-75 group-hover:text-white {{ Str::contains(Route::currentRouteName(), 'question') ? 'text-white' : '' }}" viewBox="0 0 32 32">
@@ -94,7 +94,7 @@
                     <span class="flex-1 ms-3 whitespace-nowrap sm:hidden text-black" id="textSidebarMini">Assessment Questions</span>
                 </a>
             </li>
-            @endif Disable for now--}}
+            @endif
             <li>
                 <a href="{{ route('profile') }}" class="flex justify-center p-2 text-black rounded-lg hover:bg-blue-600 group {{ Str::contains(Route::currentRouteName(), 'profile') ? 'bg-blue-600' : '' }}" id="navLink">
                     <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 text-black font-bold transition duration-75 group-hover:text-white {{ Str::contains(Route::currentRouteName(), 'profile') ? 'text-white' : '' }}" id="navIcon" viewBox="0 0 16 16">
