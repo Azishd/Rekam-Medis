@@ -41,6 +41,10 @@ Route::put('/doctor/{id}', [DoctorController::class, 'update'])->name('doctor.up
 Route::get('/patient', [PatientController::class, 'index'])->name('patient')->middleware(['auth', 'adminOrDoctor']);
 Route::get('/patient/{id}', [PatientController::class, 'show'])->name('patient.show')->middleware(['auth', 'adminOrDoctor']);
 Route::put('/patient/{id}', [PatientController::class, 'update'])->name('patient.update')->middleware(['auth', 'adminOnly']);
+Route::middleware(['auth', 'adminOrDoctor'])->group(function () {
+    Route::get('get-patient-by-nik', [PatientController::class, 'showPatientForm'])->name('get.patient.form');
+    Route::post('get-patient-by-nik', [PatientController::class, 'fetchPatientByNIK'])->name('fetch.patient');
+});
 
 Route::get('/assessment', [AssessmentController::class, 'index'])->name('assessment')->middleware('auth');
 Route::post('/assessment', [AssessmentController::class, 'start'])->name('assessment.start')->middleware('auth');

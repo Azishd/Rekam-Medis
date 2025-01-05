@@ -4,6 +4,15 @@
     <div class="p-4">
         <div class="flex flex-col rounded-2xl p-5 max-md:h-screen h-[92vh] relative" style="background-color: white;">
             <h1 class="text-2xl font-bold mb-2" style="color: #070A52;">Your Patients</h1>
+            
+            <div class="mb-4 flex justify-end">
+                <a href="{{ route('get.patient.form') }}">
+                    <button class="rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                        Search Patient by NIK
+                    </button>
+                </a>
+            </div>
+            
             <div class="relative overflow-x-auto sm:rounded-lg w-full">
                 <table class="w-full table-auto text-sm text-left rtl:text-right text-gray-500 overflow:hidden">
                     <thead class="text-xs uppercase border-b border-gray-700" style="color: #070A52;">

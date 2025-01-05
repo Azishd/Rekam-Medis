@@ -6,6 +6,7 @@ use App\Models\Assessment;
 use App\Models\Patient;
 use App\Models\Question;
 use App\Models\AssessmentQuestion;
+use App\Services\SatusehatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,4 +76,39 @@ class PatientController extends Controller
 
         return redirect('patient/' . $id);
     }
+
+    protected $satusehatService;
+
+    public function __construct(SatusehatService $satusehatService)
+    {
+        $this->satusehatService = $satusehatService;
+    }
+
+    public function showPatientForm()
+    {
+        return view('patient.apinik');
+    }
+
+    public function fetchPatientByNIK(Request $request)
+    {
+        $request->validate([
+            'nik' => 'required|numeric',
+        ]);
+
+        $nik = $request->input('nik');
+        $accessToken = $this->satusehatService->getAccessToken();
+
+        if (!$accessToken) {
+            return redirect()->back()->with('error', 'Failed to fetch access token');
+        }
+
+        $response = $this->satusehatService->getPatientByNIK($accessToken, $nik);
+
+        if (isset($response['entry']) && count($response['entry']) > 0) {
+            return view('patient.apinikdetail', ['patient' => $response['entry'][0]]);
+        }
+
+        return redirect()->back()->with('error', 'No patient found for the given NIK');
+    }
+
 }
