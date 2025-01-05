@@ -74,3 +74,7 @@ Route::get('/satusehat/patients', [SatusehatController::class, 'getPatients']);
 Route::get('/patients/by-nik', [SatusehatController::class, 'getPatientByNIK']);
 
 Route::resource('medical-records', MedicalRecordController::class)->middleware('auth');
+
+Route::get('/slot/check-slot-status/{slotId}', [AppointmentController::class, 'checkSlotStatus'])->name('check.slot.status');
+Route::get('/slot/create', [AppointmentController::class, 'createSlot'])->name('create.slot');
+Route::post('/slot/create', [AppointmentController::class, 'storeSlot'])->name('store.slot');
