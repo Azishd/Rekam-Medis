@@ -66,7 +66,6 @@ Route::post('/appointment', [AppointmentController::class, 'store'])->name('appo
 Route::get('/appointment/{id}', [AppointmentController::class, 'show'])->name('appointment.show')->middleware('auth');
 Route::get('/appointment/search', [AppointmentController::class, 'searchByActor'])->name('appointment.search')->middleware('auth');
 
-
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->middleware('auth');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
 Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');

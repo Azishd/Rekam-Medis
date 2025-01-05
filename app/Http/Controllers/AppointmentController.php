@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -50,7 +49,6 @@ class AppointmentController extends Controller
         }
     }
 
-
     // Show the form to create a new appointment (GET)
     public function create()
     {
@@ -62,40 +60,23 @@ class AppointmentController extends Controller
     {
         // Validate required fields
         $validatedData = $request->validate([
-            'patient_id' => 'required|string', // Ensure patient ID follows the FHIR format
-            'patient_name' => 'required|string',
+            'patient_id' => 'required|string',
             'appointment_date' => 'required|date',
-            'doctor_id' => 'required|string', // Ensure doctor ID follows the FHIR format
-            'doctor_name' => 'required|string',
-            'service_request_id' => 'required|string', // Required for "basedOn"
-            'slot_id' => 'required|string' // Required for slot reference
+            'doctor_id' => 'required|string',
+            'service_request_id' => 'required|string',
+            'slot_id' => 'required|string'
         ]);
-
+    
         // Get access token
         $accessToken = $this->getAccessToken();
         if (!$accessToken) {
             return back()->withErrors(['msg' => 'Failed to retrieve access token.']);
         }
-
-        // Prepare FHIR-compliant payload
+    
+        // Prepare the FHIR-compliant payload
         $data = [
             "resourceType" => "Appointment",
-            "identifier" => [
-                [
-                    "system" => "http://sys-ids.kemkes.go.id/cha-appointment",
-                    "value" => uniqid() // Generate unique ID for the appointment
-                ]
-            ],
-            "status" => "proposed", // Default status
-            "appointmentType" => [
-                "coding" => [
-                    [
-                        "system" => "http://terminology.hl7.org/CodeSystem/v2-0276",
-                        "code" => "ROUTINE",
-                        "display" => "Routine appointment"
-                    ]
-                ]
-            ],
+            "status" => "booked",
             "basedOn" => [
                 [
                     "reference" => "ServiceRequest/" . $validatedData['service_request_id']
@@ -106,24 +87,26 @@ class AppointmentController extends Controller
                     "reference" => "Slot/" . $validatedData['slot_id']
                 ]
             ],
-            "created" => now()->toIso8601String(), // Ensure correct date format
             "participant" => [
                 [
                     "actor" => [
-                        "reference" => "Patient/" . $validatedData['patient_id'],
-                        "display" => $validatedData['patient_name']
+                        "reference" => "Patient/" . $validatedData['patient_id']
                     ],
                     "status" => "accepted"
                 ],
                 [
                     "actor" => [
-                        "reference" => "HealthcareService/" . $validatedData['doctor_id'],
-                        "display" => $validatedData['doctor_name']
+                        "reference" => "Practitioner/" . $validatedData['doctor_id']
                     ],
-                    "status" => "needs-action"
+                    "status" => "accepted"
                 ]
-            ]
+            ],
+            "start" => date('c', strtotime($validatedData['appointment_date'])),
+            "end" => date('c', strtotime($validatedData['appointment_date'] . ' +30 minutes'))
         ];
+    
+        // Log the request payload before sending
+        Log::info('Appointment Payload:', ['payload' => json_encode($data, JSON_PRETTY_PRINT)]);
 
         // Send request to SATUSEHAT API
         $response = Http::withHeaders([
@@ -131,44 +114,17 @@ class AppointmentController extends Controller
             'Content-Type' => 'application/json',
         ])->post('https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Appointment', $data);
 
-        // Handle response
-        if ($response->successful()) {
-            return redirect()->route('appointment')->with('success', 'Appointment created successfully');
-        } else {
-            Log::error('Failed to create appointment', ['response' => $response->body()]);
-            return back()->withErrors(['msg' => 'Error: ' . $response->status()]);
-        }
+        // Log the response status and body
+        Log::info('API Response', ['status' => $response->status(), 'body' => $response->body()]);
+
+        // Send logs and response status back to the browser
+        return response()->json([
+            'status' => $response->status(),
+            'response' => $response->json(),
+            'log' => 'Check storage/logs/laravel.log for more details'
+        ]);
     }
 
-
-    // Verify the appointment (PUT)
-    public function verify(Request $request)
-    {
-        $accessToken = $this->getAccessToken();
-
-        if (!$accessToken) {
-            return back()->withErrors(['msg' => 'Failed to retrieve access token.']);
-        }
-
-        $data = [
-            'status' => $request->submit_button == 'accept' ? 'accepted' : 'rejected'
-        ];
-
-        $appointment = Appointment::find($request->id);
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $accessToken,
-            'Content-Type' => 'application/json',
-        ])->put("https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Appointment/{$appointment->id}", $data);
-
-        if ($response->successful()) {
-            return redirect()->route('appointments.index')
-                             ->with('success', 'Appointment updated successfully');
-        } else {
-            Log::error('Failed to update appointment', ['response' => $response->body()]);
-            return back()->withErrors(['msg' => 'Error: ' . $response->status()]);
-        }
-    }
-    
     // Function to get the access token (You can add your actual implementation here)
     private function getAccessToken()
     {
