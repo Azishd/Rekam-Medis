@@ -12,10 +12,10 @@
 
 <body>
     <header class="showcase">
-        <div class="showcase-top">
-            <img src="img/Marc_logo.png" alt="" />
-            <a href="login" class="login-button">Sign In</a>
-        </div>
+        <div class="showcase-top" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px;">  
+            <img src="img/Marc_logo.png" alt="Logo" style="width: 50px; height: auto; margin-right: 20px;" />  
+            <a href="login" class="login-button" style="text-decoration: none; padding: 10px 15px; background-color: #007BFF; color: white; border-radius: 5px;">Sign In</a>  
+        </div>  
         <div class="showcase-content">
             <h1>Hidup sehat adalah Hidup yang bahagia</h1>
             <p>Mulai dari sekarang, mari  menjalani hidup yang sehat dan bahagia</p>
