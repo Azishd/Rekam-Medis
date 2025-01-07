@@ -102,7 +102,7 @@
                     <div class="flex items-center justify-center h-40 rounded m-5">
                         <div class="py-2">
                             <h1 class="text-5xl font-bold" style="color: #070A52;">{{ $unhealthy }}</h1>
-                            <p class="text-base text-gray-500 font-normal">Unhealthy</p>
+                            <p class="text-base text-gray-500 font-normal">Sick</p>
                         </div>
                     </div>
                 </div>
@@ -221,7 +221,7 @@
                     <div class="flex items-center justify-center h-40 rounded m-5">
                         <div class="py-2">
                             <h1 class="text-5xl font-bold" style="color: #070A52;">{{ $unhealthy }}</h1>
-                            <p class="text-base text-gray-500 font-normal">Unhealthy</p>
+                            <p class="text-base text-gray-500 font-normal">Sick</p>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\MedicalRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Patient;
+use App\Models\Doctor;
+
 
 class MedicalRecordController extends Controller
 {
@@ -22,9 +25,13 @@ class MedicalRecordController extends Controller
     }
 
     public function create()
-    {
-        return view('medical-records.create');
-    }
+{
+    $patients = Patient::all(); // Ambil semua data pasien
+    $doctors = Doctor::all(); // Ambil semua data dokter
+
+    return view('medical-records.create', compact('patients', 'doctors'));
+}
+
 
     public function store(Request $request)
     {

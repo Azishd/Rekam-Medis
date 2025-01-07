@@ -68,7 +68,7 @@
                             <select id="status" name="status" autocomplete="status" required class="p-5 bg-gray-100 w-full rounded-md py-1.5 text-gray-900 shadow-sm placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 mb-5">
                                 <option value="null" selected>-</option>
                                 <option value="Healthy">Healthy</option>
-                                <option value="Unhealthy">Unhealthy</option>
+                                <option value="Unhealthy">Sick</option>
                             </select>
                             @if($errors->has('status'))
                             <div class="text-red-500 text-sm mt-1">

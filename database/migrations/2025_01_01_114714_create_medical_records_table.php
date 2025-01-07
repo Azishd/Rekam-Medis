@@ -6,19 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up()
-    {
-        Schema::create('medical_records', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->unsignedBigInteger('patient_id'); // Reference to users table
-            $table->string('doctor'); // Name of the doctor
-            $table->text('diagnosis'); // Diagnosis details
-            $table->text('prescription'); // Prescription details
-            $table->timestamps(); // created_at and updated_at
+{
+    Schema::create('add_medical_record', function (Blueprint $table) {
+        $table->id();
+        $table->string('patient');
+        $table->string('doctor');
+        $table->text('diagnosis');
+        $table->text('prescription');
+        $table->text('actions')->nullable();
+        $table->timestamps();
+    });
+}
 
-            // Foreign key constraint
-            $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
-        });
-    }
 
     public function down()
     {
